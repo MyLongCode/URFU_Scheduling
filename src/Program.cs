@@ -1,6 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using src.Infrastructure.Data;
+using System.Drawing;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+
+var connectionString = builder.Configuration.GetConnectionString("SchedulingDB");
+builder.Services.AddDbContext<SchedulingContext>(options =>
+    options.UseNpgsql(connectionString));
 
 var app = builder.Build();
 
@@ -10,7 +18,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
