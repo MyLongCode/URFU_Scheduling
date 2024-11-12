@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using URFU_Scheduling.Models;
-using src.Infrastructure.Data;
+using URFU_Scheduling.Infrastructure.Data;
 
 namespace URFU_Scheduling.Controllers
 {

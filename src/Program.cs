@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using src.Infrastructure.Data;
+using URFU_Scheduling.Infrastructure.Data;
 using System.Drawing;
 
 var builder = WebApplication.CreateBuilder(args);
