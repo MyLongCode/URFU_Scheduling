@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using URFU_Scheduling.Infrastructure.Data;
-using System.Drawing;
-using URFU_Scheduling.Domain.Repositories;
-using URFU_Scheduling.Domain.Services;
+using URFU_Scheduling_lib.Infrastructure.Data;
+using URFU_Scheduling_lib.Domain.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 

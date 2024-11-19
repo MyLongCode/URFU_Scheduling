@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using URFU_Scheduling.Models;
-using URFU_Scheduling.Infrastructure.Data;
-using URFU_Scheduling.Domain.Repositories;
-using URFU_Scheduling.Domain.Entities;
+using URFU_Scheduling_lib.Models;
+using URFU_Scheduling_lib.Infrastructure.Data;
+using URFU_Scheduling_lib.Domain.Repositories;
+using URFU_Scheduling_lib.Domain.Entities;
 
-namespace URFU_Scheduling.Controllers
+namespace URFU_Scheduling_lib.Controllers
 {
     public class HomeController : Controller
     {
