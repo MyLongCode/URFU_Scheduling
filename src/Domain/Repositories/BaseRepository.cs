@@ -3,9 +3,9 @@ using URFU_Scheduling.Domain.Interfaces;
 using URFU_Scheduling.Infrastructure.Data;
 using System;
 
-namespace URFU_Scheduling.Infrastructure.Data;
+namespace URFU_Scheduling.Domain.Repositories;
 
-public abstract class BaseRepository : IRepository
+public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Entity
 {
     protected readonly SchedulingContext _dbContext;
 
@@ -14,22 +14,22 @@ public abstract class BaseRepository : IRepository
         _dbContext = dbContext;
     }
 
-    public TEntity Add<TEntity>(TEntity entity) where TEntity : Entity
+    public TEntity Add(TEntity entity)
     {
         throw new NotImplementedException();
     }
 
-    public void Delete<TEntity>(TEntity entity) where TEntity : Entity
+    public void Delete(TEntity entity)
     {
         throw new NotImplementedException();
     }
 
-    public TEntity GetById<TEntity>(int id) where TEntity : Entity
+    public TEntity GetById(int id)
     {
         throw new NotImplementedException();
     }
 
-    public void Update<TEntity>(TEntity entity) where TEntity : Entity
+    public void Update(TEntity entity)
     {
         throw new NotImplementedException();
     }

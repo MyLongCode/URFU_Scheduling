@@ -1,10 +1,10 @@
 using URFU_Scheduling.Domain.Entities;
 
 namespace URFU_Scheduling.Domain.Interfaces;
-public interface IRepository
+public interface IRepository<TEntity> where TEntity : Entity
 {
-    TEntity GetById<TEntity>(int id) where TEntity : Entity;
-    TEntity Add<TEntity>(TEntity entity) where TEntity : Entity;
-    void Update<TEntity>(TEntity entity) where TEntity : Entity;
-    void Delete<TEntity>(TEntity entity) where TEntity : Entity;
+    TEntity GetById(int id);
+    TEntity Add(TEntity entity);
+    void Update(TEntity entity);
+    void Delete(TEntity entity);
 }
