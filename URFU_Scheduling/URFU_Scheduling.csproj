@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\URFU_Scheduling_Domain\URFU_Scheduling_lib.csproj" />
+    <ProjectReference Include="..\URFU_Scheduling_Lib\URFU_Scheduling_lib.csproj" />
   </ItemGroup>
 
 </Project>
