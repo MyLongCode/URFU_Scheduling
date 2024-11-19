@@ -14,24 +14,32 @@ public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEnti
         _dbContext = dbContext;
     }
 
-    public TEntity Add(TEntity entity)
+    public void Add(TEntity entity)
     {
-        throw new NotImplementedException();
+        _dbContext.Add(entity);
+        _dbContext.SaveChanges();
     }
 
     public void Delete(TEntity entity)
     {
-        throw new NotImplementedException();
+        _dbContext.Remove(entity);
+        _dbContext.SaveChanges();
     }
 
-    public TEntity GetById(int id)
+    public TEntity? GetById(Guid id)
     {
-        throw new NotImplementedException();
+        return _dbContext?.Find<TEntity>(id);
+    }
+
+    public TEntity[] GetAll()
+    {
+        return _dbContext.Set<TEntity>().ToArray();
     }
 
     public void Update(TEntity entity)
     {
-        throw new NotImplementedException();
+        _dbContext.Update(entity);
+        _dbContext.SaveChanges();
     }
 }
 
