@@ -1,3 +1,4 @@
+using URFU_Scheduling.Services.Interfaces;
 using URFU_Scheduling_lib.Domain.Entities;
 using URFU_Scheduling_lib.Domain.Interfaces;
 using URFU_Scheduling_lib.Domain.Repositories;
