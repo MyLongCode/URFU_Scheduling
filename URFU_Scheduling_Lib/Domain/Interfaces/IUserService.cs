@@ -4,6 +4,6 @@
     {
         public bool Register(object? data);
 
-        public bool Authorize(string login, string password);
+        public Task<bool> Authorize(string login, string password);
     }
 }
