@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using URFU_Scheduling.Controllers.DTO;
 using URFU_Scheduling.Services;
+using URFU_Scheduling_lib.Domain.Entities;
 using URFU_Scheduling_lib.Domain.Repositories;
 using URFU_Scheduling_lib.Infrastructure.Data;
 
@@ -22,15 +24,19 @@ namespace URFU_Scheduling.Controllers
             _eventService = eventRepository;
         }
         [HttpPost("/schedule")]
-        public async Task<IActionResult> ScheduleCreate()
+        public async Task<IActionResult> ScheduleCreate(ScheduleDTO dto)
         {
-            return Ok();
+            return Ok(_scheduleService.Create(new Schedule()
+            {
+                UserId = dto.UserId,
+                Name = dto.Name,
+            }));
         }
 
         [HttpGet("/schedule/{scheduleId}")]
-        public async Task<IActionResult> ScheduleRetrieve(int scheduleId)
+        public async Task<IActionResult> ScheduleGetById(Guid scheduleId)
         {
-            return Ok("Schedule obj");
+            return Ok(_scheduleService.Get(scheduleId));
         }
 
         [HttpPut("/schedule/{scheduleId}")]
@@ -40,8 +46,11 @@ namespace URFU_Scheduling.Controllers
         }
 
         [HttpDelete("/schedule/{scheduleId}")]
-        public async Task<IActionResult> ScheduleDelete(int scheduleId)
+        public async Task<IActionResult> ScheduleDelete(Guid scheduleId)
         {
+            var schedule = _scheduleService.Get(scheduleId);
+            if (schedule == null) return NotFound();
+            _scheduleService.Delete(schedule);
             return Ok();
         }
 

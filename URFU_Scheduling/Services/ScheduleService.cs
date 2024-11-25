@@ -1,4 +1,5 @@
-﻿using URFU_Scheduling.Services.Interfaces;
+﻿using URFU_Scheduling.Controllers.DTO;
+using URFU_Scheduling.Services.Interfaces;
 using URFU_Scheduling_lib.Domain.Entities;
 using URFU_Scheduling_lib.Domain.Interfaces;
 using URFU_Scheduling_lib.Domain.Repositories;
@@ -32,24 +33,12 @@ namespace URFU_Scheduling.Services
             throw new NotImplementedException();
         }
 
-        public bool Update(Schedule schedule)
-        {
-            throw new NotImplementedException();
-        }
+        public void Update(Schedule schedule) => _scheduleRepo.Update(schedule);
 
-        public Schedule? Create(object? data)
-        {
-            throw new NotImplementedException();
-        }
+        public Guid? Create(Schedule data) => _scheduleRepo.Add(data);
 
-        public bool Delete(Schedule schedule)
-        {
-            throw new NotImplementedException();
-        }
+        public void Delete(Schedule schedule) => _scheduleRepo.Delete(schedule);
 
-        public Schedule? Get(object? data)
-        {
-            throw new NotImplementedException();
-        }
+        public Schedule? Get(Guid id) => _scheduleRepo.GetById(id);
     }
 }

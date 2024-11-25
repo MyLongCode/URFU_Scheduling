@@ -17,24 +17,12 @@ namespace URFU_Scheduling.Services
             _tagService = tagService;
         }
 
-        public Event? Create(object? data)
-        {
-            throw new NotImplementedException();
-        }
+        public Guid? Create(Event data) => _eventRepo.Add(data);
 
-        public bool Delete(Event schedule)
-        {
-            throw new NotImplementedException();
-        }
+        public void Delete(Event schedule) => _eventRepo.Delete(schedule);
 
-        public Event? Get(object? data)
-        {
-            throw new NotImplementedException();
-        }
+        public Event? Get(Guid id) => _eventRepo.GetById(id);
 
-        public bool Update(Event schedule)
-        {
-            throw new NotImplementedException();
-        }
+        public void Update(Event schedule) => _eventRepo.Update(schedule);
     }
 }

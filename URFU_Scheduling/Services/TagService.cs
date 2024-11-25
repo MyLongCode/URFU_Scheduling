@@ -14,24 +14,12 @@ namespace URFU_Scheduling.Services
             _tagRepo = tagRepository;
         }
 
-        public Tag? Create(object? data)
-        {
-            throw new NotImplementedException();
-        }
+        public Guid? Create(Tag data) => _tagRepo.Add(data);
 
-        public bool Delete(Tag tag)
-        {
-            throw new NotImplementedException();
-        }
+        public void Delete(Tag tag) => _tagRepo.Delete(tag);
 
-        public Tag? Get(object? data)
-        {
-            throw new NotImplementedException();
-        }
+        public Tag? Get(Guid id) => _tagRepo.GetById(id);
 
-        public bool Update(Tag tag)
-        {
-            throw new NotImplementedException();
-        }
+        public void Update(Tag tag) => _tagRepo.Update(tag);
     }
 }

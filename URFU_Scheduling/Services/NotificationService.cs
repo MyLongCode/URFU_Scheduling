@@ -22,5 +22,6 @@ namespace URFU_Scheduling.Services
         {
             provider.Send(message, user);
         }
+
     }
 }
