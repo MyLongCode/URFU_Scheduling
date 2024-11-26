@@ -1,11 +1,11 @@
 namespace URFU_Scheduling_lib.Domain.Interfaces;
 public interface ICRUDSerivce<TEntity>
 {
-    public TEntity? Create(object? data);
+    public Guid? Create(TEntity data);
 
-    public TEntity? Get(object? data);
+    public TEntity? Get(Guid id);
 
-    public bool Update(TEntity entity);
+    public void Update(TEntity entity);
 
-    public bool Delete(TEntity entity);
+    public void Delete(TEntity entity);
 }

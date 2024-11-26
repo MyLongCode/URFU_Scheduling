@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using URFU_Scheduling_lib.Infrastructure.Data;
 using URFU_Scheduling_lib.Domain.Repositories;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

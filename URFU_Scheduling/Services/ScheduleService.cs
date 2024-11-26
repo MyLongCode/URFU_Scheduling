@@ -1,10 +1,12 @@
-﻿using URFU_Scheduling_lib.Domain.Entities;
+﻿using URFU_Scheduling.Controllers.DTO;
+using URFU_Scheduling.Services.Interfaces;
+using URFU_Scheduling_lib.Domain.Entities;
 using URFU_Scheduling_lib.Domain.Interfaces;
 using URFU_Scheduling_lib.Domain.Repositories;
 
 namespace URFU_Scheduling.Services
 {
-    public class ScheduleService : IScheduleService
+    public class ScheduleService : CRUDService<Schedule>, IScheduleService
     {
         private readonly ScheduleRepository _scheduleRepo;
         private readonly IEventSerivce _eventService;
@@ -14,7 +16,7 @@ namespace URFU_Scheduling.Services
         public ScheduleService(
             ScheduleRepository scheduleRepository,
             IEventSerivce eventService,
-            ITagService tagService)
+            ITagService tagService) : base(scheduleRepository)
         {
             _scheduleRepo = scheduleRepository;
             _eventService = eventService;
@@ -27,26 +29,6 @@ namespace URFU_Scheduling.Services
         }
 
         public Schedule Import(IScheduleImportProvider provider)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update(Schedule schedule)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Schedule? Create(object? data)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Delete(Schedule schedule)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Schedule? Get(object? data)
         {
             throw new NotImplementedException();
         }

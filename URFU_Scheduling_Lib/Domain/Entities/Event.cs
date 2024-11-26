@@ -9,7 +9,7 @@ public class Event : Entity
     public int ScheduleId { get; set; }
 
     [Column("tag_id")]
-    public int TagId { get; set; }
+    public int? TagId { get; set; }
 
     [Column("is_notify")]
     public bool IsNotify { get; set; }
