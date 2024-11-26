@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Data;
 using System.Security.Claims;
+﻿using URFU_Scheduling.Services.Interfaces;
 using URFU_Scheduling_lib.Domain.Interfaces;
 using URFU_Scheduling_lib.Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;

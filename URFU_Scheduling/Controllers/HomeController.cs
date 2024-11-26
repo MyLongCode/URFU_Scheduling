@@ -11,7 +11,7 @@ namespace URFU_Scheduling_lib.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        private readonly UserRepository _userRepo;
+        private readonly UserRepository _userService;
 
         public HomeController(
             ILogger<HomeController> logger,
@@ -19,7 +19,7 @@ namespace URFU_Scheduling_lib.Controllers
             UserRepository userRepository)
         {
             _logger = logger;
-            _userRepo = userRepository;
+            _userService = userRepository;
         }
 
         public IActionResult Index()
@@ -42,12 +42,12 @@ namespace URFU_Scheduling_lib.Controllers
         [Route("test")]
         public IActionResult DbTest()
         {
-            var first = _userRepo.GetAll();
+            var first = _userService.GetAll();
             var user = new User(){Login = "admin", Password = "admin"};
-            _userRepo.Add(user);
-            var second = _userRepo.GetAll();
-            _userRepo.Delete(user);
-            var third = _userRepo.GetAll();
+            _userService.Add(user);
+            var second = _userService.GetAll();
+            _userService.Delete(user);
+            var third = _userService.GetAll();
             return Ok(
                 new Dictionary<string, object>()
                 {

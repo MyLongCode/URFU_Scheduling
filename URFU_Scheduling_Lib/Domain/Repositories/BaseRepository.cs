@@ -13,10 +13,11 @@ public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEnti
         _dbContext = dbContext;
     }
 
-    public void Add(TEntity entity)
+    public Guid Add(TEntity entity)
     {
         _dbContext.Add(entity);
         _dbContext.SaveChanges();
+        return entity.Id;
     }
 
     public void Delete(TEntity entity)
