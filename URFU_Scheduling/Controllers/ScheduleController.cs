@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using URFU_Scheduling.Controllers.DTO;
 using URFU_Scheduling.Services;
 using URFU_Scheduling_lib.Domain.Entities;

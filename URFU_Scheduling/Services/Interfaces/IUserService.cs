@@ -5,8 +5,8 @@ namespace URFU_Scheduling.Services.Interfaces
 {
     public interface IUserService
     {
-        public bool Register(object? data);
+        public bool Register(IRegistrationData data);
 
-        public bool Authorize(string login, string password);
+        public Task<bool> Authorize(string login, string password);
     }
 }

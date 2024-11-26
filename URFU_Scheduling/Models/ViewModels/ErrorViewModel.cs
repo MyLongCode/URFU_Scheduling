@@ -1,4 +1,4 @@
-namespace URFU_Scheduling_lib.Models
+namespace URFU_Scheduling.Models.ViewModels
 {
     public class ErrorViewModel
     {
