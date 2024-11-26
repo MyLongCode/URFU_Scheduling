@@ -12,4 +12,3 @@ namespace URFU_Scheduling.Controllers.DTO
         public DateTime SentAt { get; set; }
     }
 }
-}

@@ -23,6 +23,7 @@ namespace URFU_Scheduling.Controllers
             _scheduleService = sheduleRepository;
             _eventService = eventRepository;
         }
+
         [HttpPost("/schedule")]
         public async Task<IActionResult> ScheduleCreate(ScheduleDTO dto)
         {

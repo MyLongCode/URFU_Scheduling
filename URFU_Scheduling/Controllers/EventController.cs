@@ -60,7 +60,6 @@ namespace URFU_Scheduling.Controllers
         [HttpPost("/schedule/{scheduleId}/event/{scheduleEventId}/import/?import_type={importType}")]
         public async Task<IActionResult> ImportEvent(int scheduleId, int scheduleEventId, string importType)
         {
-
             return Ok();
         }
     }

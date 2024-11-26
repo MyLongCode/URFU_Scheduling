@@ -6,7 +6,7 @@ using URFU_Scheduling_lib.Domain.Repositories;
 
 namespace URFU_Scheduling.Services
 {
-    public class ScheduleService : IScheduleService
+    public class ScheduleService : CRUDService<Schedule>, IScheduleService
     {
         private readonly ScheduleRepository _scheduleRepo;
         private readonly IEventSerivce _eventService;
@@ -16,7 +16,7 @@ namespace URFU_Scheduling.Services
         public ScheduleService(
             ScheduleRepository scheduleRepository,
             IEventSerivce eventService,
-            ITagService tagService)
+            ITagService tagService) : base(scheduleRepository)
         {
             _scheduleRepo = scheduleRepository;
             _eventService = eventService;
@@ -32,13 +32,5 @@ namespace URFU_Scheduling.Services
         {
             throw new NotImplementedException();
         }
-
-        public void Update(Schedule schedule) => _scheduleRepo.Update(schedule);
-
-        public Guid? Create(Schedule data) => _scheduleRepo.Add(data);
-
-        public void Delete(Schedule schedule) => _scheduleRepo.Delete(schedule);
-
-        public Schedule? Get(Guid id) => _scheduleRepo.GetById(id);
     }
 }
