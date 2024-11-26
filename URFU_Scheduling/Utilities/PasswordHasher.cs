@@ -1,20 +1,20 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
 
-namespace URFU_Scheduling.Services
+namespace URFU_Scheduling.Utilities
 {
     public static class PasswordHasher
     {
         public static string HashPassword(string password)
         {
-            byte[] saltBytes = new byte[128 / 8];
+            var saltBytes = new byte[128 / 8];
             using (var rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(saltBytes);
             }
-            string salt = Convert.ToBase64String(saltBytes);
+            var salt = Convert.ToBase64String(saltBytes);
 
-            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            var hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password: password,
                 salt: saltBytes,
                 prf: KeyDerivationPrf.HMACSHA256,
@@ -32,12 +32,12 @@ namespace URFU_Scheduling.Services
                 throw new FormatException("Invalid stored hash format");
             }
 
-            string salt = parts[0];
-            string storedPasswordHash = parts[1];
+            var salt = parts[0];
+            var storedPasswordHash = parts[1];
 
-            byte[] saltBytes = Convert.FromBase64String(salt);
+            var saltBytes = Convert.FromBase64String(salt);
 
-            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            var hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password: password,
                 salt: saltBytes,
                 prf: KeyDerivationPrf.HMACSHA256,

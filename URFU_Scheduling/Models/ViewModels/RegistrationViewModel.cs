@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using URFU_Scheduling_lib.Domain.Interfaces;
 
-namespace URFU_Scheduling.Models
+namespace URFU_Scheduling.Models.ViewModels
 {
-    public class RegistrationViewModel
+    public class RegistrationViewModel : IRegistrationData
     {
         [Required(ErrorMessage = "Не указан логин")]
         [MaxLength(50, ErrorMessage = "Логин не может быть длиннее 50 символов")]

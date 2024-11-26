@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using URFU_Scheduling_lib.Models;
+using URFU_Scheduling.Models.ViewModels;
 using URFU_Scheduling_lib.Infrastructure.Data;
 using URFU_Scheduling_lib.Domain.Repositories;
 using URFU_Scheduling_lib.Domain.Entities;

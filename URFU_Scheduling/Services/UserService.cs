@@ -5,7 +5,8 @@ using System.Security.Claims;
 using URFU_Scheduling_lib.Domain.Interfaces;
 using URFU_Scheduling_lib.Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using URFU_Scheduling.Models;
+using URFU_Scheduling.Utilities;
+using URFU_Scheduling.Models.ViewModels;
 
 namespace URFU_Scheduling.Services
 {
@@ -39,9 +40,8 @@ namespace URFU_Scheduling.Services
             return true;
         }
 
-        public bool Register(object data) 
+        public bool Register(IRegistrationData model) 
         {
-            var model = (RegistrationViewModel)data;
             _userRepo.Add(new URFU_Scheduling_lib.Domain.Entities.User()
             {
                 Login = model.Login,

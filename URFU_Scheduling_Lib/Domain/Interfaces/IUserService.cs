@@ -2,7 +2,7 @@
 {
     public interface IUserService
     {
-        public bool Register(object? data);
+        public bool Register(IRegistrationData data);
 
         public Task<bool> Authorize(string login, string password);
     }

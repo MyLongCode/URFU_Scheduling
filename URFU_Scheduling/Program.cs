@@ -19,9 +19,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
                 .AddCookie(options => 
                 {
                     options.LoginPath = new PathString("/Auth/Login");
-                    options.AccessDeniedPath = new PathString("/Auth/Denied");
-                    //options.AccessDeniedPath = new PathString("/Auth/Denied"); 
-                    //Хотел чтобы при попытке неавторизированного доступа кидало на страницу с ошибкой, но не работает
                 });
 
 var app = builder.Build();

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace URFU_Scheduling.Models
+namespace URFU_Scheduling.Models.ViewModels
 {
     public class LoginViewModel
     {
