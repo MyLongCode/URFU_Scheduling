@@ -41,7 +41,7 @@ namespace URFU_Scheduling.Controllers
         }
 
         [HttpPut("/schedule/{scheduleId}")]
-        public async Task<IActionResult> ScheduleUpdate(int scheduleId)
+        public async Task<IActionResult> ScheduleUpdate(Guid scheduleId)
         {
             return Ok();
         }
@@ -55,26 +55,27 @@ namespace URFU_Scheduling.Controllers
             return Ok();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddEvent(int scheduleId)
+        [HttpPost] //what differ with EventController.CreateEvent?
+        public async Task<IActionResult> AddEvent(Guid scheduleId)
         {
             return Ok();
         }
 
         [HttpGet("/schedule/{scheduleId}/events/?period={period}")]
-        public async Task<IActionResult> GetEvents(int scheduleId, string period)
+        //help method in eventService
+        public async Task<IActionResult> GetEvents(Guid scheduleId, string period)
         {
             return Ok("week or month schedule obj");
         }
 
         [HttpGet("/schedule/{scheduleId}/export")]
-        public async Task<IActionResult> ScheduleExport(int scheduleId)
+        public async Task<IActionResult> ScheduleExport(Guid scheduleId)
         {
             return Ok("schedule file");
         }
 
         [HttpPost("schedule/import/?import_type={importType}")]
-        public async Task<IActionResult> ScheduleImport(string importType)
+        public async Task<IActionResult> ScheduleImport(Guid importType)
         {
             return Ok();
         }

@@ -20,5 +20,7 @@ namespace URFU_Scheduling.Services
         public T? Get(Guid id) => _repo.GetById(id);
 
         public void Update(T schedule) => _repo.Update(schedule);
+
+        public T[] GetAll() => _repo.GetAll();
     }
 }

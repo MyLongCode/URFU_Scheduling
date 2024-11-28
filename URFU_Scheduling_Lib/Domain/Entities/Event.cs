@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using URFU_Scheduling_lib.Domain.Enums;
 
 namespace URFU_Scheduling_lib.Domain.Entities;
 
@@ -6,10 +7,10 @@ namespace URFU_Scheduling_lib.Domain.Entities;
 public class Event : Entity
 {
     [Column("schedule_id")]
-    public int ScheduleId { get; set; }
+    public Guid ScheduleId { get; set; }
 
     [Column("tag_id")]
-    public int? TagId { get; set; }
+    public Guid? TagId { get; set; }
 
     [Column("is_notify")]
     public bool IsNotify { get; set; }
@@ -27,5 +28,5 @@ public class Event : Entity
     public TimeSpan Duration { get; set; }
 
     [Column("recurrence")]
-    public TimeSpan Recurrence { get; set; }
+    public RecurrenceEvent Recurrence { get; set; }
 }

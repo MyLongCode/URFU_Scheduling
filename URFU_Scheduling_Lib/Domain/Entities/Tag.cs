@@ -6,7 +6,7 @@ namespace URFU_Scheduling_lib.Domain.Entities;
 public class Tag : Entity
 {
     [Column("user_id")]
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
 
     [Column("name")]
     public string Name { get; set; }

@@ -7,10 +7,10 @@ namespace URFU_Scheduling_lib.Domain.Entities;
 public class Notification : Entity
 {
     [Column("event_id")]
-    public int EventId { get; set; }
+    public Guid EventId { get; set; }
 
     [Column("user_id")]
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
 
     [Column("message")]
     public string Message { get; set; }
