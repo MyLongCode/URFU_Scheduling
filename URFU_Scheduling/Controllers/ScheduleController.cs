@@ -37,46 +37,55 @@ namespace URFU_Scheduling.Controllers
         [HttpGet("/schedule/{scheduleId}")]
         public async Task<IActionResult> ScheduleGetById(Guid scheduleId)
         {
-            return Ok(_scheduleService.Get(scheduleId));
+            var schedule = _scheduleService.Get(scheduleId);
+            return shedule != null? Ok(schedule): NotFound("no schedule");
         }
 
         [HttpPut("/schedule/{scheduleId}")]
-        public async Task<IActionResult> ScheduleUpdate(Guid scheduleId)
+        public async Task<IActionResult> ScheduleUpdate(Guid scheduleId, ScheduleDTO dto)
         {
-            return Ok();
+            var schedule = _scheduleService.Get(scheduleId);
+            if (schedule == null) return NotFound("no schedule");
+            schedule.Name = dto.Name;
+            // Мне кажется, что schedule.UserId = dto.UserId; не нужен, наврядли
+            // пользователь будет передавать свое расписание??
+            _scheduleService.Update(schedule);
+            return Ok(schedule);
         }
 
         [HttpDelete("/schedule/{scheduleId}")]
         public async Task<IActionResult> ScheduleDelete(Guid scheduleId)
         {
             var schedule = _scheduleService.Get(scheduleId);
-            if (schedule == null) return NotFound();
+            if (schedule == null) return NotFound("no schedule");
             _scheduleService.Delete(schedule);
-            return Ok();
-        }
-
-        [HttpPost] //what differ with EventController.CreateEvent?
-        public async Task<IActionResult> AddEvent(Guid scheduleId)
-        {
             return Ok();
         }
 
         [HttpGet("/schedule/{scheduleId}/events/?period={period}")]
         //help method in eventService
-        public async Task<IActionResult> GetEvents(Guid scheduleId, string period)
+        // NEW 
+        // Подумать как будут выводиться повторяющиеся эвенты, если добавил предмет в расписание месяц назад,
+        // как он будет виден каждую неделю? и какое время он будет отображаться: месяц, семестр, год?
+        // + на что влияет дата в параметрах, по идее можно будет посмотреть расписание за прошлую неделю с её помощью
+        public async Task<IActionResult> GetEvents(Guid scheduleId, string period, DateTime dateStart)
         {
-            return Ok("week or month schedule obj");
+            var schedule = _scheduleService.Get(scheduleId);
+            if (schedule == null) return NotFound("no schedule");
+            return Ok(_eventService.GetEvents(scheduleId, period, dateStart);
         }
 
         [HttpGet("/schedule/{scheduleId}/export")]
         public async Task<IActionResult> ScheduleExport(Guid scheduleId)
         {
+            // сделать, когда будет готов ScheduleExport
             return Ok("schedule file");
         }
 
         [HttpPost("schedule/import/?import_type={importType}")]
         public async Task<IActionResult> ScheduleImport(Guid importType)
         {
+            // сделать, когда будет готов ScheduleImport
             return Ok();
         }
     }
