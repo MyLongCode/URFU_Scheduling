@@ -7,6 +7,7 @@ using URFU_Scheduling_lib.Domain.Interfaces;
 using URFU_Scheduling_lib.Domain.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using URFU_Scheduling.Models.ViewModels;
+using URFU_Scheduling.Services.Interfaces;
 
 namespace URFU_Scheduling.Controllers
 {

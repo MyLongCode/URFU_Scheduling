@@ -27,19 +27,19 @@ namespace URFU_Scheduling.Controllers
         }
 
         [HttpGet("/tag/{tagId}")]
-        public async Task<IActionResult> TagRetrieve(int tagId)
+        public async Task<IActionResult> TagRetrieve(Guid tagId)
         {
             return Ok("tag obj");
         }
 
         [HttpPut("/tag/{tagId}")]
-        public async Task<IActionResult> TagUpdate(int tagId)
+        public async Task<IActionResult> TagUpdate(Guid tagId)
         {
             return Ok();
         }
 
         [HttpDelete("/tag/{tagId}")]
-        public async Task<IActionResult> TagDelete(int tagId)
+        public async Task<IActionResult> TagDelete(Guid tagId)
         {
             return Ok();
         }

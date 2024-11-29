@@ -5,13 +5,14 @@ using System.Security.Claims;
 ﻿using URFU_Scheduling.Services.Interfaces;
 using URFU_Scheduling_lib.Domain.Interfaces;
 using URFU_Scheduling_lib.Domain.Repositories;
+using URFU_Scheduling_lib.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using URFU_Scheduling.Utilities;
 using URFU_Scheduling.Models.ViewModels;
 
 namespace URFU_Scheduling.Services
 {
-    public class UserService : IUserService
+    public class UserService : CRUDService<User> , IUserService
     {
         private readonly UserRepository _userRepo;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -19,7 +20,7 @@ namespace URFU_Scheduling.Services
 
         public UserService(
             UserRepository userRepository,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor) : base(userRepository)
         {
             _userRepo = userRepository;
             _httpContextAccessor = httpContextAccessor;
@@ -43,7 +44,7 @@ namespace URFU_Scheduling.Services
 
         public bool Register(IRegistrationData model) 
         {
-            _userRepo.Add(new URFU_Scheduling_lib.Domain.Entities.User()
+            _userRepo.Add(new User()
             {
                 Login = model.Login,
                 Password = PasswordHasher.HashPassword(model.Password)

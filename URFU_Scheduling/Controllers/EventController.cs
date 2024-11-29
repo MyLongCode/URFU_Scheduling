@@ -20,38 +20,38 @@ namespace URFU_Scheduling.Controllers
             _eventService = eventRepository;
         }
         [HttpPost("/schedule/{scheduleId}/event")]
-        public async Task<IActionResult> EventCreate(int scheduleId)
+        public async Task<IActionResult> EventCreate(Guid scheduleId)
         {
             return Ok();
         }
 
         [HttpGet("/schedule/{scheduleId}/event/{scheduleEventId}")]
-        public async Task<IActionResult> EventRetrieve(int scheduleId, int scheduleEventId)
+        public async Task<IActionResult> EventRetrieve(Guid scheduleId, Guid scheduleEventId)
         {
             return Ok("ScheduleEvent obj");
         }
 
         [HttpPut("/schedule/{scheduleId}/event/{scheduleEventId}")]
-        public async Task<IActionResult> EventUpdate(int scheduleId, int scheduleEventId)
+        public async Task<IActionResult> EventUpdate(Guid scheduleId, Guid scheduleEventId)
         {
             return Ok();
         }
-
+        /
         [HttpDelete("/schedule/{scheduleId}/event/{scheduleEventId}")]
-        public async Task<IActionResult> EventDelete(int scheduleId, int scheduleEventId)
+        public async Task<IActionResult> EventDelete(Guid scheduleId, Guid scheduleEventId)
         {
             return Ok();
         }
 
         [HttpPost("/schedule/{scheduleId}/event/{scheduleEventId}/addTag/{tagId}")]
-        public async Task<IActionResult> AddTag(int scheduleId, int scheduleEventId, int tagId)
+        public async Task<IActionResult> AddTag(Guid scheduleId, Guid scheduleEventId, Guid tagId)
         {
 
             return Ok();
         }
 
         [HttpPatch("/schedule/{scheduleId}/event/{scheduleEventId}/recurrence")]
-        public async Task<IActionResult> EditEventRepeatability(int scheduleId, int scheduleEventId)
+        public async Task<IActionResult> EditEventRepeatability(Guid scheduleId, Guid scheduleEventId)
         {
 
             return Ok();

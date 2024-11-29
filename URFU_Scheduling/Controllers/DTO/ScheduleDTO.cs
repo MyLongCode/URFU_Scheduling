@@ -4,7 +4,7 @@ namespace URFU_Scheduling.Controllers.DTO
 {
     public class ScheduleDTO
     {
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public string Name { get; set; }
     }
 }
