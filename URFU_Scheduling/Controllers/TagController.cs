@@ -5,6 +5,7 @@ using URFU_Scheduling_lib.Controllers;
 using URFU_Scheduling_lib.Domain.Entities;
 using URFU_Scheduling_lib.Domain.Repositories;
 using URFU_Scheduling_lib.Infrastructure.Data;
+using URFU_Scheduling.Services.Interfaces;
 
 namespace URFU_Scheduling.Controllers
 {
@@ -12,7 +13,7 @@ namespace URFU_Scheduling.Controllers
     {
         private readonly ILogger<TagController> _logger;
 
-        private readonly TagService _tagService;
+        private readonly ITagService _tagService;
 
         public TagController(
             ILogger<TagController> logger,

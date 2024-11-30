@@ -2,6 +2,8 @@
 using URFU_Scheduling.Services;
 using URFU_Scheduling.Controllers.DTO;
 using URFU_Scheduling_lib.Domain.Entities;
+using URFU_Scheduling.Services.Interfaces;
+using URFU_Scheduling_lib.Domain.Enums;
 
 
 namespace URFU_Scheduling.Controllers
@@ -10,8 +12,8 @@ namespace URFU_Scheduling.Controllers
     {
         private readonly ILogger<EventController> _logger;
 
-        private readonly ScheduleService _scheduleService;
-        private readonly EventService _eventService;
+        private readonly IScheduleService _scheduleService;
+        private readonly IEventSerivce _eventService;
 
         public EventController(
             ILogger<EventController> logger,
@@ -29,7 +31,8 @@ namespace URFU_Scheduling.Controllers
         {
             var schedule = _scheduleService.Get(scheduleId);
             if (schedule == null) return NotFound("no schedule");
-            var newEvent = new Event() {
+            var newEvent = new Event()
+            {
                 ScheduleId = dto.ScheduleId,
                 TagId = dto.TagId,
                 IsNotify = dto.IsNotify,
@@ -54,7 +57,7 @@ namespace URFU_Scheduling.Controllers
         public async Task<IActionResult> EventUpdate(Guid scheduleEventId, EventDTO dto)
         {
             var scheduleEvent = _eventService.Get(scheduleEventId);
-            if (sheduleEvent == null) return NotFound("no event");
+            if (scheduleEvent == null) return NotFound("no event");
 
             scheduleEvent.ScheduleId = dto.ScheduleId;
             scheduleEvent.TagId = dto.TagId;
@@ -68,7 +71,7 @@ namespace URFU_Scheduling.Controllers
 
             return Ok(scheduleEvent);
         }
-        
+
         [HttpDelete("/event/{scheduleEventId}")]
         public async Task<IActionResult> EventDelete(Guid scheduleEventId)
         {
@@ -87,12 +90,13 @@ namespace URFU_Scheduling.Controllers
         }
 
         [HttpPatch("/event/{scheduleEventId}/recurrence")]
-        public async Task<IActionResult> EditEventRepeatability(Guid scheduleEventId, TimeSpan eventRecurrence)
+        public async Task<IActionResult> EditEventRepeatability(
+            Guid scheduleEventId, RecurrenceEvent eventRecurrence)
         {
             var scheduleEvent = _eventService.Get(scheduleEventId);
-            if (sheduleEvent == null) return NotFound("no event");
+            if (scheduleEvent == null) return NotFound("no event");
 
-            _eventService.EditRepeatability(eventRecurrence);
+            _eventService.EditRepeatability(scheduleEventId, eventRecurrence);
             return Ok(scheduleEvent);
         }
 

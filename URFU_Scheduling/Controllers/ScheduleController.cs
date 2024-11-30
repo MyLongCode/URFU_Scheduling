@@ -1,9 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
+п»їusing Microsoft.AspNetCore.Mvc;
 using URFU_Scheduling.Controllers.DTO;
 using URFU_Scheduling.Services;
 using URFU_Scheduling_lib.Domain.Entities;
-using URFU_Scheduling_lib.Domain.Repositories;
-using URFU_Scheduling_lib.Infrastructure.Data;
+using URFU_Scheduling.Services.Interfaces;
 
 namespace URFU_Scheduling.Controllers
 {
@@ -11,8 +10,8 @@ namespace URFU_Scheduling.Controllers
     {
         private readonly ILogger<ScheduleController> _logger;
 
-        private readonly ScheduleService _scheduleService;
-        private readonly EventService _eventService;
+        private readonly IScheduleService _scheduleService;
+        private readonly IEventSerivce _eventService;
 
         public ScheduleController(
             ILogger<ScheduleController> logger,
@@ -38,7 +37,7 @@ namespace URFU_Scheduling.Controllers
         public async Task<IActionResult> ScheduleGetById(Guid scheduleId)
         {
             var schedule = _scheduleService.Get(scheduleId);
-            return shedule != null? Ok(schedule): NotFound("no schedule");
+            return schedule != null ? Ok(schedule) : NotFound("no schedule");
         }
 
         [HttpPut("/schedule/{scheduleId}")]
@@ -47,8 +46,8 @@ namespace URFU_Scheduling.Controllers
             var schedule = _scheduleService.Get(scheduleId);
             if (schedule == null) return NotFound("no schedule");
             schedule.Name = dto.Name;
-            // Мне кажется, что schedule.UserId = dto.UserId; не нужен, наврядли
-            // пользователь будет передавать свое расписание??
+            // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ schedule.UserId = dto.UserId; пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ??
             _scheduleService.Update(schedule);
             return Ok(schedule);
         }
@@ -65,27 +64,27 @@ namespace URFU_Scheduling.Controllers
         [HttpGet("/schedule/{scheduleId}/events/?period={period}")]
         //help method in eventService
         // NEW 
-        // Подумать как будут выводиться повторяющиеся эвенты, если добавил предмет в расписание месяц назад,
-        // как он будет виден каждую неделю? и какое время он будет отображаться: месяц, семестр, год?
-        // + на что влияет дата в параметрах, по идее можно будет посмотреть расписание за прошлую неделю с её помощью
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ,
+        // пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ? пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ?
+        // + пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         public async Task<IActionResult> GetEvents(Guid scheduleId, string period, DateTime dateStart)
         {
             var schedule = _scheduleService.Get(scheduleId);
             if (schedule == null) return NotFound("no schedule");
-            return Ok(_eventService.GetEvents(scheduleId, period, dateStart);
+            return Ok(_eventService.GetEvents(scheduleId, period, dateStart));
         }
 
         [HttpGet("/schedule/{scheduleId}/export")]
         public async Task<IActionResult> ScheduleExport(Guid scheduleId)
         {
-            // сделать, когда будет готов ScheduleExport
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ ScheduleExport
             return Ok("schedule file");
         }
 
         [HttpPost("schedule/import/?import_type={importType}")]
         public async Task<IActionResult> ScheduleImport(Guid importType)
         {
-            // сделать, когда будет готов ScheduleImport
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ ScheduleImport
             return Ok();
         }
     }
