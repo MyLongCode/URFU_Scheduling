@@ -18,7 +18,7 @@ namespace URFU_Scheduling.Controllers
         public TagController(
             ILogger<TagController> logger,
             SchedulingContext db,
-            TagService tagService)
+            ITagService tagService)
         {
             _logger = logger;
             _tagService = tagService;

@@ -5,7 +5,7 @@ namespace URFU_Scheduling.Services.Interfaces
 {
     public interface IScheduleService : ICRUDSerivce<Schedule>
     {
-        public bool Export(IScheduleExportProvider provider, Schedule schedule);
+        public bool Export(IScheduleExportProvider provider, Schedule schedule, out object result);
 
         public Schedule Import(IScheduleImportProvider provider);
     }

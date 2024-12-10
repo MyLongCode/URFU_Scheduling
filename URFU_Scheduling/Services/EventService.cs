@@ -6,7 +6,7 @@ using URFU_Scheduling_lib.Domain.Repositories;
 
 namespace URFU_Scheduling.Services
 {
-    public class EventService : CRUDService<Event>, IEventSerivce
+    public class EventService : CRUDService<Event>, IEventService
     {
         private readonly EventRepository _eventRepo;
         private readonly ITagService _tagService;

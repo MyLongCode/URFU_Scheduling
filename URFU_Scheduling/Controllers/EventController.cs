@@ -13,12 +13,12 @@ namespace URFU_Scheduling.Controllers
         private readonly ILogger<EventController> _logger;
 
         private readonly IScheduleService _scheduleService;
-        private readonly IEventSerivce _eventService;
+        private readonly IEventService _eventService;
 
         public EventController(
             ILogger<EventController> logger,
-            ScheduleService sheduleRepository,
-            EventService eventRepository)
+            IScheduleService sheduleRepository,
+            IEventService eventRepository)
         {
             _logger = logger;
             _scheduleService = sheduleRepository;
@@ -101,7 +101,7 @@ namespace URFU_Scheduling.Controllers
         }
 
         // сделать, когда будет нужный сервис
-        [HttpPost("/event/{scheduleEventId}/import/?import_type={importType}")]
+        [HttpPost("/event/{scheduleEventId}/import/{importType}")]
         public async Task<IActionResult> ImportEvent(int scheduleId, int scheduleEventId, string importType)
         {
             return Ok();

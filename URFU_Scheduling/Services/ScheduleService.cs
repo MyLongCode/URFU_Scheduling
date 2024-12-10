@@ -9,13 +9,12 @@ namespace URFU_Scheduling.Services
     public class ScheduleService : CRUDService<Schedule>, IScheduleService
     {
         private readonly ScheduleRepository _scheduleRepo;
-        private readonly IEventSerivce _eventService;
+        private readonly IEventService _eventService;
         private readonly ITagService _tagService;
-
 
         public ScheduleService(
             ScheduleRepository scheduleRepository,
-            IEventSerivce eventService,
+            IEventService eventService,
             ITagService tagService) : base(scheduleRepository)
         {
             _scheduleRepo = scheduleRepository;
@@ -23,14 +22,23 @@ namespace URFU_Scheduling.Services
             _tagService = tagService;
         }
 
-        public bool Export(IScheduleExportProvider provider, Schedule schedule)
+        public bool Export(IScheduleExportProvider provider, Schedule schedule, out object result)
         {
-            throw new NotImplementedException();
+            try
+            {
+                result = provider.Export(schedule);
+                return true;
+            }
+            catch
+            {
+                result = null;
+                return false;
+            }
         }
 
         public Schedule Import(IScheduleImportProvider provider)
         {
-            throw new NotImplementedException();
+            return provider.Import();
         }
     }
 }
