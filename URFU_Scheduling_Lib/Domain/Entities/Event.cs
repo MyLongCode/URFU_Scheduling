@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using URFU_Scheduling_lib.Domain.Enums;
 
 namespace URFU_Scheduling_lib.Domain.Entities;
@@ -8,6 +9,10 @@ public class Event : Entity
 {
     [Column("schedule_id")]
     public Guid ScheduleId { get; set; }
+
+    [ForeignKey("ScheduleId")]
+
+    public virtual Schedule Schedule { get; set; }
 
     [Column("tag_id")]
     public Guid? TagId { get; set; }
@@ -27,6 +32,7 @@ public class Event : Entity
     [Column("duration")]
     public TimeSpan Duration { get; set; }
 
-    [Column("recurrence")]
+    //[Column("recurrence")]
+    [NotMapped]
     public RecurrenceEvent Recurrence { get; set; }
 }

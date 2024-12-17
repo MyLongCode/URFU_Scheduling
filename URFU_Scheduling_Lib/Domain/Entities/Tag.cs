@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Drawing;
 
 namespace URFU_Scheduling_lib.Domain.Entities;
 
@@ -12,6 +13,6 @@ public class Tag : Entity
     public string Name { get; set; }
 
     [Column("color")]
-    public string Color { get; set; } //ToDo: what type should it be?
+    public Color Color { get; set; }
 }
 

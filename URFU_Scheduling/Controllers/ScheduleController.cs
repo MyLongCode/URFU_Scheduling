@@ -3,24 +3,27 @@ using URFU_Scheduling.Controllers.DTO;
 using URFU_Scheduling.Services;
 using URFU_Scheduling_lib.Domain.Entities;
 using URFU_Scheduling.Services.Interfaces;
+using URFU_Scheduling_lib.Domain.Interfaces;
 
 namespace URFU_Scheduling.Controllers
 {
     public class ScheduleController : Controller
     {
         private readonly ILogger<ScheduleController> _logger;
-
         private readonly IScheduleService _scheduleService;
-        private readonly IEventSerivce _eventService;
+        private readonly IEventService _eventService;
+        private readonly IScheduleExportProvider _exportProvider;
 
         public ScheduleController(
             ILogger<ScheduleController> logger,
-            ScheduleService sheduleRepository,
-            EventService eventRepository)
+            IScheduleService sheduleRepository,
+            IEventService eventRepository,
+            IScheduleExportProvider exportProvider)
         {
             _logger = logger;
             _scheduleService = sheduleRepository;
             _eventService = eventRepository;
+            _exportProvider = exportProvider;
         }
 
         [HttpPost("/schedule")]
@@ -61,7 +64,7 @@ namespace URFU_Scheduling.Controllers
             return Ok();
         }
 
-        [HttpGet("/schedule/{scheduleId}/events/?period={period}")]
+        [HttpGet("/schedule/{scheduleId}/events/{period}")]
         //help method in eventService
         // NEW 
         // �������� ��� ����� ���������� ������������� ������, ���� ������� ������� � ���������� ����� �����,
@@ -78,10 +81,14 @@ namespace URFU_Scheduling.Controllers
         public async Task<IActionResult> ScheduleExport(Guid scheduleId)
         {
             // �������, ����� ����� ����� ScheduleExport
-            return Ok("schedule file");
+            var schedule = _scheduleService.Get(scheduleId);
+            if (schedule == null) return NoContent();
+            _scheduleService.Export(_exportProvider, schedule, out object result);
+            var data = result as byte[];
+            return File(data, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
 
-        [HttpPost("schedule/import/?import_type={importType}")]
+        [HttpPost("schedule/import/{importType}")]
         public async Task<IActionResult> ScheduleImport(Guid importType)
         {
             // �������, ����� ����� ����� ScheduleImport
