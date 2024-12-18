@@ -1,4 +1,5 @@
-﻿using URFU_Scheduling_lib.Domain.Entities;
+﻿using System.Diagnostics.Eventing.Reader;
+using URFU_Scheduling_lib.Domain.Entities;
 using URFU_Scheduling_lib.Domain.Interfaces;
 
 namespace URFU_Scheduling.Services.Interfaces
@@ -7,6 +8,6 @@ namespace URFU_Scheduling.Services.Interfaces
     {
         public bool Export(IScheduleExportProvider provider, Schedule schedule, out object result);
 
-        public Schedule Import(IScheduleImportProvider provider);
-    }
+        public bool Import(IScheduleImportProvider provider, byte[] bytes, out object result);
+    } 
 }

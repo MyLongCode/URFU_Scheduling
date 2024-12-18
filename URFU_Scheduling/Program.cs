@@ -23,7 +23,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
-builder.Services.AddScoped<IScheduleExportProvider, SheetsScheduleExportProvider>();
+//builder.Services.AddScoped<IScheduleExportProvider, SheetsScheduleExportProvider>();
+builder.Services.AddScoped<IScheduleExportProvider, IcsScheduleExportProvider>();
+builder.Services.AddScoped<IScheduleImportProvider, IcsScheduleImportProvider>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => 
                 {

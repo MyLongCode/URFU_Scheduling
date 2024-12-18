@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using URFU_Scheduling.Controllers.DTO;
-using URFU_Scheduling.Services;
 using URFU_Scheduling_lib.Domain.Entities;
 using URFU_Scheduling.Services.Interfaces;
 using URFU_Scheduling_lib.Domain.Interfaces;
+
 
 namespace URFU_Scheduling.Controllers
 {
@@ -13,17 +13,22 @@ namespace URFU_Scheduling.Controllers
         private readonly IScheduleService _scheduleService;
         private readonly IEventService _eventService;
         private readonly IScheduleExportProvider _exportProvider;
+        private readonly IScheduleImportProvider _importProvider;
+
+
 
         public ScheduleController(
             ILogger<ScheduleController> logger,
             IScheduleService sheduleRepository,
             IEventService eventRepository,
-            IScheduleExportProvider exportProvider)
+            IScheduleExportProvider exportProvider,
+            IScheduleImportProvider importProvider)
         {
             _logger = logger;
             _scheduleService = sheduleRepository;
             _eventService = eventRepository;
             _exportProvider = exportProvider;
+            _importProvider = importProvider;
         }
 
         [HttpPost("/schedule")]
@@ -80,19 +85,48 @@ namespace URFU_Scheduling.Controllers
         [HttpGet("/schedule/{scheduleId}/export")]
         public async Task<IActionResult> ScheduleExport(Guid scheduleId)
         {
-            // �������, ����� ����� ����� ScheduleExport
             var schedule = _scheduleService.Get(scheduleId);
             if (schedule == null) return NoContent();
             _scheduleService.Export(_exportProvider, schedule, out object result);
             var data = result as byte[];
-            return File(data, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            //return File(data, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            return File(data, "text/calendar", $"{schedule.Name}.ics");
         }
 
-        [HttpPost("schedule/import/{importType}")]
-        public async Task<IActionResult> ScheduleImport(Guid importType)
+        [HttpPost("/schedule/import/{userId}")]
+        public async Task<IActionResult> ScheduleImport(Guid userId, IFormFile file)
         {
-            // �������, ����� ����� ����� ScheduleImport
-            return Ok();
+            if (file == null || file.Length == 0) return BadRequest("Файл не загружен.");
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                var bytes = memoryStream.ToArray();
+                if (_scheduleService.Import(_importProvider, bytes, out object result))
+                {
+                    var events = result as List<Event>;
+                    var schedule = new Schedule()
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = userId,
+                        Name = "Imported"
+                    };
+
+                    _scheduleService.Create(schedule);
+
+                    foreach(var el in events)
+                    {
+                        el.ScheduleId = schedule.Id;
+                        _eventService.Create(el);
+                    }
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest("Ошибка при импорте расписания.");
+                }
+
+            }
         }
     }
 }
