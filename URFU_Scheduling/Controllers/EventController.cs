@@ -3,7 +3,7 @@ using URFU_Scheduling.Services;
 using URFU_Scheduling.Controllers.DTO;
 using URFU_Scheduling_lib.Domain.Entities;
 using URFU_Scheduling.Services.Interfaces;
-using URFU_Scheduling_lib.Domain.Enums;
+using URFU_Scheduling_lib.Domain.Entities;
 
 
 namespace URFU_Scheduling.Controllers
@@ -40,7 +40,7 @@ namespace URFU_Scheduling.Controllers
                 Description = dto.Description,
                 DateStart = dto.DateStart,
                 Duration = dto.Duration,
-                Recurrence = dto.Recurrence
+                RecurrenceId = dto.RecurrenceId
             };
             return Ok(_eventService.Create(newEvent));
         }
@@ -66,7 +66,7 @@ namespace URFU_Scheduling.Controllers
             scheduleEvent.Description = dto.Description;
             scheduleEvent.DateStart = dto.DateStart;
             scheduleEvent.Duration = dto.Duration;
-            scheduleEvent.Recurrence = dto.Recurrence;
+            scheduleEvent.RecurrenceId = dto.RecurrenceId;
             _eventService.Update(scheduleEvent);
 
             return Ok(scheduleEvent);
@@ -91,12 +91,12 @@ namespace URFU_Scheduling.Controllers
 
         [HttpPatch("/event/{scheduleEventId}/recurrence")]
         public async Task<IActionResult> EditEventRepeatability(
-            Guid scheduleEventId, RecurrenceEvent eventRecurrence)
+            Guid scheduleEventId, Guid recurrenceId)
         {
             var scheduleEvent = _eventService.Get(scheduleEventId);
             if (scheduleEvent == null) return NotFound("no event");
 
-            _eventService.EditRepeatability(scheduleEventId, eventRecurrence);
+            _eventService.EditRecurrence(scheduleEventId, recurrenceId);
             return Ok(scheduleEvent);
         }
 

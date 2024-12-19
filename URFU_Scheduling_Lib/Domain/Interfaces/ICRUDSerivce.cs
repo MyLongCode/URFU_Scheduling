@@ -8,4 +8,5 @@ public interface ICRUDSerivce<TEntity>
     public void Update(TEntity entity);
 
     public void Delete(TEntity entity);
+    public TEntity[] GetAll();
 }

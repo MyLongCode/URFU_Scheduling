@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using URFU_Scheduling.Services.Interfaces;
+﻿using URFU_Scheduling.Services.Interfaces;
 using URFU_Scheduling_lib.Domain.Entities;
-using URFU_Scheduling_lib.Domain.Enums;
 using URFU_Scheduling_lib.Domain.Repositories;
 
 namespace URFU_Scheduling.Services
@@ -34,10 +32,10 @@ namespace URFU_Scheduling.Services
             }
         }
 
-        public Event EditRepeatability(Guid EventId, RecurrenceEvent recurrence)
+        public Event EditRecurrence(Guid EventId, Guid recurrence)
         {
             var ev = Get(EventId);
-            ev.Recurrence = recurrence;
+            ev.RecurrenceId = recurrence;
             Update(ev);
             return ev;
         }
