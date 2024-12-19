@@ -19,6 +19,7 @@ builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<ScheduleRepository>();
 builder.Services.AddScoped<EventRepository>();
 builder.Services.AddScoped<TagRepository>();
+builder.Services.AddScoped<RecurrenceRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<ITagService, TagService>();
@@ -26,6 +27,7 @@ builder.Services.AddScoped<IScheduleService, ScheduleService>();
 //builder.Services.AddScoped<IScheduleExportProvider, SheetsScheduleExportProvider>();
 builder.Services.AddScoped<IScheduleExportProvider, IcsScheduleExportProvider>();
 builder.Services.AddScoped<IScheduleImportProvider, IcsScheduleImportProvider>();
+builder.Services.AddScoped<IRecurrenceService, RecurrenceService>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => 
                 {

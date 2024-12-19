@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace URFU_Scheduling.Controllers.DTO;
 
