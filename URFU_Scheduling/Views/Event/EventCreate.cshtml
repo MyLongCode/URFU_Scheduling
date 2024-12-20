@@ -1,0 +1,58 @@
+﻿@using URFU_Scheduling.Controllers.DTO
+
+@model EventDTO
+
+@{
+    ViewBag.Title = "Создать событие";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Create event</h2>
+    <form asp-action="EventCreate" asp-controller="Event" method="post">
+        <input asp-for="ScheduleId" class="form-control" value="@Model.ScheduleId" hidden />
+        @Html.AntiForgeryToken()
+        <div class="mb-3">
+            <label for="Name" class="form-label">Event name</label>
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Input event name" })
+            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="mb-3">
+            <label for="Description" class="form-label">Description</label>
+            @Html.TextAreaFor(m => m.Description, new { @class = "form-control", placeholder = "Input description", rows = 3 })
+            @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="mb-3">
+            <label for="DateStart" class="form-label">Date start</label>
+            @Html.TextBoxFor(m => m.DateStart, "{0:yyyy-MM-ddTHH:mm}", new { @class = "form-control", type = "datetime-local"})
+            @Html.ValidationMessageFor(m => m.DateStart, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="mb-3">
+            <label for="Duration" class="form-label">Duration (hour:minute)</label>
+            @Html.TextBoxFor(m => m.Duration, "{0:hh\\:mm}", new { @class = "form-control", placeholder = "Input duration" })
+            @Html.ValidationMessageFor(m => m.Duration, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="mb-3">
+            <label for="TagId" class="form-label">Тег</label>
+            <select id="TagId" name="TagId" class="form-control">
+                <option value="">Select tag</option>
+                @foreach (var tag in ViewBag.Tags as List<SelectListItem>)
+                {
+                    <option value="@tag.Value">@tag.Text</option>
+                }
+            </select>
+            @Html.ValidationMessageFor(m => m.TagId, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="mb-3 form-check">
+            @Html.CheckBoxFor(m => m.IsNotify, new { @class = "form-check-input", id = "IsNotify" })
+            <label class="form-check-label" for="IsNotify">Enable notification</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+</div>

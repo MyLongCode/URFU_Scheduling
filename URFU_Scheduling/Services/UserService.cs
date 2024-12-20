@@ -26,6 +26,8 @@ namespace URFU_Scheduling.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
+        public Guid GetIdByLogin(string login) => _userRepo.GetIdByLogin(login);
+
         public async Task<bool> Authorize(string login, string password)
         {
             var user = _userRepo.GetAll().FirstOrDefault(u => u.Login == login);
