@@ -24,11 +24,13 @@ namespace URFU_Scheduling.Controllers
             _userService = userService;
         }
 
+        [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
 
+        [HttpGet]
         public IActionResult Login()
         {
             return View();
@@ -50,7 +52,7 @@ namespace URFU_Scheduling.Controllers
         {
             if (ModelState.IsValid)
             {
-                if(_userService.Register(model)) ViewBag.Message = "Успешная регистрация";
+                if(_userService.Register(model)) return RedirectToAction("Index", "Profile");
                 else ViewBag.Message = "Ошибка во время регистарции";
             }
             else
@@ -67,7 +69,7 @@ namespace URFU_Scheduling.Controllers
             {
                 if (_userService.Authorize(model.Login, model.Password).Result)
                 {
-                    return RedirectToAction("Home", "Schedule");
+                    return RedirectToAction("Index", "Profile");
                 }
                 else
                 {

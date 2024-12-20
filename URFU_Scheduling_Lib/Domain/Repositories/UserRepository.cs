@@ -6,5 +6,7 @@ namespace URFU_Scheduling_lib.Domain.Repositories;
 public class UserRepository : BaseRepository<User>
 {
     public UserRepository(SchedulingContext dbContext) : base(dbContext) { }
+
+    public Guid GetIdByLogin(string login) => _dbContext.Users.FirstOrDefault(u =>  u.Login == login).Id;
 }
 

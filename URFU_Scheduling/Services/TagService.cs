@@ -14,6 +14,6 @@ namespace URFU_Scheduling.Services
             _tagRepo = tagRepository;
         }
 
-
+        public List<Tag> GetUserTags(Guid userId) => _tagRepo.GetUserTags(userId);
     }
 }

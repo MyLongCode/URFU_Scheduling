@@ -5,6 +5,6 @@ namespace URFU_Scheduling.Services.Interfaces
 {
     public interface ITagService : ICRUDSerivce<Tag>
     {
-        
+        public List<Tag> GetUserTags(Guid userId);
     }
 }

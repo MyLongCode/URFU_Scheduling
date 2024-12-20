@@ -1,10 +1,11 @@
 ﻿@model URFU_Scheduling.Models.ViewModels.RegistrationViewModel
 
 @{
-    ViewData["Title"] = "Register";
+    ViewBag.Title = "Register";
+    Layout = "/Views/Shared/_Layout.cshtml";
 }
 
-<h4>Зарегистрироваться</h4>
+<h4>Registration</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -26,7 +27,7 @@
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Зарегистрироваться " class="btn btn-primary" />
+                <input type="submit" value="Registration" class="btn btn-primary" />
             </div>
         </form>
         @if (ViewBag.Message != null)

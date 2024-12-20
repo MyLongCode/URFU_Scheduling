@@ -1,0 +1,23 @@
+﻿@using URFU_Scheduling.Models.ViewModels
+
+@model CreateScheduleViewModel
+
+@{
+    ViewBag.Title = "Create schedule";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Create schedule</h2>
+    <form asp-action="ScheduleCreate" asp-controller="Schedule" method="post">
+        <input asp-for="UserId" class="form-control" value="@Model.UserId" hidden />
+        @Html.AntiForgeryToken()
+        <div class="mb-3">
+            <label for="Name" class="form-label">Title</label>
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Input schedule title" })
+            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+</div>
