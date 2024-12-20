@@ -4,7 +4,7 @@ using URFU_Scheduling.Controllers.DTO;
 using URFU_Scheduling_lib.Domain.Entities;
 using URFU_Scheduling.Services.Interfaces;
 using URFU_Scheduling_lib.Domain.Enums;
-
+using Microsoft.AspNetCore.SignalR;
 
 namespace URFU_Scheduling.Controllers
 {
@@ -14,35 +14,43 @@ namespace URFU_Scheduling.Controllers
 
         private readonly IScheduleService _scheduleService;
         private readonly IEventService _eventService;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
         public EventController(
             ILogger<EventController> logger,
             IScheduleService sheduleRepository,
-            IEventService eventRepository)
+            IEventService eventRepository,
+            IHubContext<NotificationHub> hubContext)
         {
             _logger = logger;
             _scheduleService = sheduleRepository;
             _eventService = eventRepository;
+            _hubContext = hubContext;
         }
 
 
         [HttpPost("/schedule/{scheduleId}/event")]
         public async Task<IActionResult> EventCreate(Guid scheduleId, EventDTO dto)
         {
-            var schedule = _scheduleService.Get(scheduleId);
-            if (schedule == null) return NotFound("no schedule");
-            var newEvent = new Event()
-            {
-                ScheduleId = dto.ScheduleId,
-                TagId = dto.TagId,
-                IsNotify = dto.IsNotify,
-                Name = dto.Name,
-                Description = dto.Description,
-                DateStart = dto.DateStart,
-                Duration = dto.Duration,
-                Recurrence = dto.Recurrence
-            };
-            return Ok(_eventService.Create(newEvent));
+            //var schedule = _scheduleService.Get(scheduleId);
+            //if (schedule == null) return NotFound("no schedule");
+            //var newEvent = new Event()
+            //{
+            //    ScheduleId = dto.ScheduleId,
+            //    TagId = dto.TagId,
+            //    IsNotify = dto.IsNotify,
+            //    Name = dto.Name,
+            //    Description = dto.Description,
+            //    DateStart = dto.DateStart,
+            //    Duration = dto.Duration,
+            //    Recurrence = dto.Recurrence
+            //};
+
+            // schedule.UserId
+            var usr = "12412412"; // User.Identity.Name;
+            await _hubContext.Clients.All.SendAsync("Receive", usr, $"add event {dto.Name} {dto.DateStart} in schedule {scheduleId}");
+            //return Ok(_eventService.Create(newEvent));
+            return Ok(1);
         }
 
         [HttpGet("/event/{scheduleEventId}")]

@@ -6,6 +6,9 @@ using URFU_Scheduling.Services;
 using URFU_Scheduling.Services.Interfaces;
 using URFU_Scheduling_lib.Domain.Interfaces;
 using URFU_Scheduling.Utilities;
+using Microsoft.AspNetCore.Http.Connections;
+using Microsoft.AspNetCore.SignalR;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +32,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
                 {
                     options.LoginPath = new PathString("/Auth/Login");
                 });
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -38,6 +42,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -45,9 +50,10 @@ app.UseRouting();
 app.UseAuthentication();   
 app.UseAuthorization();
 
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Auth}/{action=Login}/{id?}");
+
+app.MapHub<NotificationHub>("/ws");
 
 app.Run();

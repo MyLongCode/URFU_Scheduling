@@ -2,6 +2,8 @@
 using URFU_Scheduling_lib.Domain.Entities;
 using URFU_Scheduling_lib.Domain.Interfaces;
 using URFU_Scheduling_lib.Domain.Repositories;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Authorization;
 
 namespace URFU_Scheduling.Services
 {
@@ -23,5 +25,25 @@ namespace URFU_Scheduling.Services
             provider.Send(message, user);
         }
 
+    }
+
+    // [Authorize]
+    public class NotificationHub : Hub
+    {
+        public async Task Send(string message)
+        {
+            await this.Clients.All.SendAsync("Receive", message);
+        }
+
+        public override async Task OnConnectedAsync()
+        {
+            await Clients.All.SendAsync("Notify", $"{Context.ConnectionId} подключен");
+            await base.OnConnectedAsync();
+        }
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+            await Clients.All.SendAsync("Notify", $"{Context.ConnectionId} подключен");
+            await base.OnDisconnectedAsync(exception);
+        }
     }
 }

@@ -49,8 +49,6 @@ namespace URFU_Scheduling.Controllers
             var schedule = _scheduleService.Get(scheduleId);
             if (schedule == null) return NotFound("no schedule");
             schedule.Name = dto.Name;
-            // ��� �������, ��� schedule.UserId = dto.UserId; �� �����, ��������
-            // ������������ ����� ���������� ���� ����������??
             _scheduleService.Update(schedule);
             return Ok(schedule);
         }
@@ -65,11 +63,6 @@ namespace URFU_Scheduling.Controllers
         }
 
         [HttpGet("/schedule/{scheduleId}/events/{period}")]
-        //help method in eventService
-        // NEW 
-        // �������� ��� ����� ���������� ������������� ������, ���� ������� ������� � ���������� ����� �����,
-        // ��� �� ����� ����� ������ ������? � ����� ����� �� ����� ������������: �����, �������, ���?
-        // + �� ��� ������ ���� � ����������, �� ���� ����� ����� ���������� ���������� �� ������� ������ � � �������
         public async Task<IActionResult> GetEvents(Guid scheduleId, string period, DateTime dateStart)
         {
             var schedule = _scheduleService.Get(scheduleId);
@@ -80,7 +73,6 @@ namespace URFU_Scheduling.Controllers
         [HttpGet("/schedule/{scheduleId}/export")]
         public async Task<IActionResult> ScheduleExport(Guid scheduleId)
         {
-            // �������, ����� ����� ����� ScheduleExport
             var schedule = _scheduleService.Get(scheduleId);
             if (schedule == null) return NoContent();
             _scheduleService.Export(_exportProvider, schedule, out object result);
@@ -91,7 +83,6 @@ namespace URFU_Scheduling.Controllers
         [HttpPost("schedule/import/{importType}")]
         public async Task<IActionResult> ScheduleImport(Guid importType)
         {
-            // �������, ����� ����� ����� ScheduleImport
             return Ok();
         }
     }
