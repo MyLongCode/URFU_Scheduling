@@ -1,0 +1,49 @@
+﻿@using URFU_Scheduling.Models.ViewModels
+@model ScheduleViewModel
+
+@{
+    ViewBag.Title = Model.ScheduleName;
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">@Model.ScheduleName</h1>
+    <h4 class="text-center mb-4">Event for the @Model.Period</h4>
+    <h4 class="text-center mb-4"> <a href="@Url.Action("EventCreate", "Event", new { scheduleId = Model.Id})" class="btn btn-outline-dark">Add Event</a></h4>
+    <div class="row">
+        @if (Model.Events != null && Model.Events.Any())
+        {
+            @foreach (var ev in Model.Events)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="card-title mb-0">@ev.Name</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text"><strong>Description:</strong> @ev.Description</p>
+                            <p class="card-text">
+                                <strong>Date start:</strong> @ev.DateStart.ToString("dd.MM.yyyy HH:mm")
+                            </p>
+                            <p class="card-text">
+                                <strong>Duration:</strong> @ev.Duration.ToString(@"hh\:mm")
+                            </p>
+                            <p class="card-text">
+                                <strong>Notification:</strong> @(ev.IsNotify ? "Enable" : "Disable")
+                            </p>
+                        </div>
+@*                         <div class="card-footer text-end">
+                            <button class="btn btn-outline-primary btn-sm">Подробнее</button>
+                        </div> *@
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <p class="text-center text-muted">No events</p>
+            </div>
+        }
+    </div>
+</div>
