@@ -67,7 +67,6 @@ namespace URFU_Scheduling.Controllers
             return Ok();
         }
 
-        // все тэги пользователя? если так, то примерно такой метод:
         [HttpGet("/tag")]
         public async Task<IActionResult> TagList(Guid userId)
         {

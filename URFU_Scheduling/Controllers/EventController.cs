@@ -5,6 +5,7 @@ using URFU_Scheduling_lib.Domain.Entities;
 using URFU_Scheduling.Services.Interfaces;
 using URFU_Scheduling_lib.Domain.Enums;
 using Microsoft.AspNetCore.SignalR;
+using NuGet.Protocol;
 
 namespace URFU_Scheduling.Controllers
 {
@@ -32,25 +33,23 @@ namespace URFU_Scheduling.Controllers
         [HttpPost("/schedule/{scheduleId}/event")]
         public async Task<IActionResult> EventCreate(Guid scheduleId, EventDTO dto)
         {
-            //var schedule = _scheduleService.Get(scheduleId);
-            //if (schedule == null) return NotFound("no schedule");
-            //var newEvent = new Event()
-            //{
-            //    ScheduleId = dto.ScheduleId,
-            //    TagId = dto.TagId,
-            //    IsNotify = dto.IsNotify,
-            //    Name = dto.Name,
-            //    Description = dto.Description,
-            //    DateStart = dto.DateStart,
-            //    Duration = dto.Duration,
-            //    Recurrence = dto.Recurrence
-            //};
+            var schedule = _scheduleService.Get(scheduleId);
+            if (schedule == null) return NotFound("no schedule");
+            var newEvent = new Event()
+            {
+                ScheduleId = dto.ScheduleId,
+                TagId = dto.TagId,
+                IsNotify = dto.IsNotify,
+                Name = dto.Name,
+                Description = dto.Description,
+                DateStart = dto.DateStart,
+                Duration = dto.Duration,
+                Recurrence = dto.Recurrence
+            };
 
-            // schedule.UserId
-            var usr = "12412412"; // User.Identity.Name;
+            var usr = User.Identity.Name;
             await _hubContext.Clients.All.SendAsync("Receive", usr, $"add event {dto.Name} {dto.DateStart} in schedule {scheduleId}");
-            //return Ok(_eventService.Create(newEvent));
-            return Ok(1);
+            return Ok(_eventService.Create(newEvent));
         }
 
         [HttpGet("/event/{scheduleEventId}")]
@@ -58,7 +57,10 @@ namespace URFU_Scheduling.Controllers
         {
             var scheduleEvent = _eventService.Get(scheduleEventId);
             if (scheduleEvent == null) return NotFound("no event");
-            return Ok(scheduleEvent);
+            var totalString = scheduleEvent.Name + " " + scheduleEvent.Description + " " +
+                scheduleEvent.DateStart.ToString() + " " + scheduleEvent.Duration.ToString() + 
+                scheduleEvent.Schedule.Name.ToString();
+            return Ok(totalString);
         }
 
         [HttpPut("/event/{scheduleEventId}")]
@@ -77,7 +79,10 @@ namespace URFU_Scheduling.Controllers
             scheduleEvent.Recurrence = dto.Recurrence;
             _eventService.Update(scheduleEvent);
 
-            return Ok(scheduleEvent);
+            var totalString = scheduleEvent.Name + " " + scheduleEvent.Description + " " +
+                scheduleEvent.DateStart.ToString() + " " + scheduleEvent.Duration.ToString() +
+                scheduleEvent.Schedule.Name.ToString();
+            return Ok(totalString);
         }
 
         [HttpDelete("/event/{scheduleEventId}")]
