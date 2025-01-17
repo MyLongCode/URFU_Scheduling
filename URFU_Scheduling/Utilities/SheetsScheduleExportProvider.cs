@@ -14,7 +14,8 @@ namespace URFU_Scheduling.Utilities
 
         public SheetsScheduleExportProvider()
         {
-            _excelPackage = new ExcelPackage();
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            _excelPackage = new ExcelPackage(new FileInfo("MyWorkbook.xlsx"));
         }
 
         public object Export(Schedule schedule)

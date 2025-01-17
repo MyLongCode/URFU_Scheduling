@@ -3,6 +3,9 @@ using URFU_Scheduling.Controllers.DTO;
 using URFU_Scheduling_lib.Domain.Entities;
 using URFU_Scheduling.Services.Interfaces;
 using URFU_Scheduling_lib.Domain.Interfaces;
+using URFU_Scheduling.Models.ViewModels;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace URFU_Scheduling.Controllers
@@ -13,39 +16,76 @@ namespace URFU_Scheduling.Controllers
         private readonly IScheduleService _scheduleService;
         private readonly IEventService _eventService;
         private readonly IScheduleExportProvider _exportProvider;
+
         private readonly IScheduleImportProvider _importProvider;
-
-
+        private readonly IUserService _userService;
 
         public ScheduleController(
             ILogger<ScheduleController> logger,
             IScheduleService sheduleRepository,
             IEventService eventRepository,
             IScheduleExportProvider exportProvider,
-            IScheduleImportProvider importProvider)
+            IScheduleImportProvider importProvider,
+            IUserService userService)
         {
             _logger = logger;
             _scheduleService = sheduleRepository;
             _eventService = eventRepository;
             _exportProvider = exportProvider;
             _importProvider = importProvider;
+            _userService = userService;
+        }
+
+        [HttpGet("/schedule")]
+        public async Task<IActionResult> ScheduleCreate()
+        {
+            var viewmodel = new CreateScheduleViewModel()
+            {
+                UserId = _userService.GetIdByLogin(User.Identity.Name)
+            };
+            return View(viewmodel);
         }
 
         [HttpPost("/schedule")]
         public async Task<IActionResult> ScheduleCreate(ScheduleDTO dto)
         {
-            return Ok(_scheduleService.Create(new Schedule()
+            _scheduleService.Create(new Schedule()
             {
                 UserId = dto.UserId,
                 Name = dto.Name,
-            }));
+            });
+            return RedirectToAction("ScheduleGetByUserId");
+        }
+
+        [HttpGet("/schedule/all")]
+        public async Task<IActionResult> ScheduleGetByUserId()
+        {
+            var userId = _userService.GetIdByLogin(User.Identity.Name);
+            var schedules = _scheduleService.GetAllUserSchedules(userId);
+            var viewmodel = new ListSchedulesViewModel()
+            {
+                Schedules = schedules
+            };
+            return View("ListSchedules", viewmodel);
         }
 
         [HttpGet("/schedule/{scheduleId}")]
-        public async Task<IActionResult> ScheduleGetById(Guid scheduleId)
+        public async Task<IActionResult> ScheduleGetById(Guid scheduleId, string period, DateTime startDate)
         {
             var schedule = _scheduleService.Get(scheduleId);
-            return schedule != null ? Ok(schedule) : NotFound("no schedule");
+            if (schedule == null) return NotFound("schedule is not defined");
+            if (period == null) period = "week";
+            if (startDate == null) startDate = DateTime.MinValue;
+            var events = _eventService.GetEvents(schedule.Id, period, startDate).ToList();
+            var viewmodel = new ScheduleViewModel()
+            {
+                Id = scheduleId,
+                ScheduleName = schedule.Name,
+                Events = events,
+                Period = period,
+            };
+            return View("Index", viewmodel);
+            //return schedule != null ? Ok(schedule) : NotFound("no schedule");
         }
 
         [HttpPut("/schedule/{scheduleId}")]
@@ -54,8 +94,6 @@ namespace URFU_Scheduling.Controllers
             var schedule = _scheduleService.Get(scheduleId);
             if (schedule == null) return NotFound("no schedule");
             schedule.Name = dto.Name;
-            // ��� �������, ��� schedule.UserId = dto.UserId; �� �����, ��������
-            // ������������ ����� ���������� ���� ����������??
             _scheduleService.Update(schedule);
             return Ok(schedule);
         }
@@ -70,11 +108,6 @@ namespace URFU_Scheduling.Controllers
         }
 
         [HttpGet("/schedule/{scheduleId}/events/{period}")]
-        //help method in eventService
-        // NEW 
-        // �������� ��� ����� ���������� ������������� ������, ���� ������� ������� � ���������� ����� �����,
-        // ��� �� ����� ����� ������ ������? � ����� ����� �� ����� ������������: �����, �������, ���?
-        // + �� ��� ������ ���� � ����������, �� ���� ����� ����� ���������� ���������� �� ������� ������ � � �������
         public async Task<IActionResult> GetEvents(Guid scheduleId, string period, DateTime dateStart)
         {
             var schedule = _scheduleService.Get(scheduleId);

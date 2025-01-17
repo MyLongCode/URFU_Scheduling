@@ -22,6 +22,8 @@ namespace URFU_Scheduling.Services
             _tagService = tagService;
         }
 
+        public List<Schedule> GetAllUserSchedules(Guid userId) => _scheduleRepo.GetAllUserSchedules(userId);
+
         public bool Export(IScheduleExportProvider provider, Schedule schedule, out object result)
         {
             try

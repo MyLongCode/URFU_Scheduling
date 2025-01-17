@@ -5,6 +5,9 @@ using URFU_Scheduling_lib.Domain.Entities;
 using URFU_Scheduling.Services.Interfaces;
 using URFU_Scheduling_lib.Domain.Entities;
 
+using Microsoft.AspNetCore.SignalR;
+using NuGet.Protocol;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace URFU_Scheduling.Controllers
 {
@@ -15,16 +18,45 @@ namespace URFU_Scheduling.Controllers
         private readonly IScheduleService _scheduleService;
         private readonly IEventService _eventService;
 
+        private readonly IHubContext<NotificationHub> _hubContext;
+
+        private readonly ITagService _tagService;
+        private readonly IUserService _userService;
+
+
         public EventController(
             ILogger<EventController> logger,
             IScheduleService sheduleRepository,
-            IEventService eventRepository)
+            IEventService eventRepository,
+            IHubContext<NotificationHub> hubContext,
+            ITagService tagService,
+            IUserService userService)
         {
             _logger = logger;
             _scheduleService = sheduleRepository;
             _eventService = eventRepository;
+            _hubContext = hubContext;
+            _tagService = tagService;
+            _userService = userService;
         }
 
+        [HttpGet("/schedule/{scheduleId}/event")]
+        public async Task<IActionResult> EventCreate(Guid scheduleId)
+        {
+            var schedule = _scheduleService.Get(scheduleId);
+            var userTags = _tagService.GetUserTags(_userService.GetIdByLogin(User.Identity.Name));
+            var viewmodel = new EventDTO()
+            {
+                ScheduleId = scheduleId,
+                DateStart = DateTime.Now
+            };
+            ViewBag.Tags = userTags.Select(tag => new SelectListItem
+            {
+                Value = tag.Id.ToString(),
+                Text = tag.Name
+            }).ToList();
+            return View(viewmodel);
+        }
 
         [HttpPost("/schedule/{scheduleId}/event")]
         public async Task<IActionResult> EventCreate(Guid scheduleId, EventDTO dto)
@@ -42,7 +74,11 @@ namespace URFU_Scheduling.Controllers
                 Duration = dto.Duration,
                 RecurrenceId = dto.RecurrenceId
             };
-            return Ok(_eventService.Create(newEvent));
+
+            var usr = User.Identity.Name;
+            await _hubContext.Clients.All.SendAsync("Receive", usr, $"add event {dto.Name} {dto.DateStart} in schedule {scheduleId}");
+            _eventService.Create(newEvent);
+            return RedirectToAction("ScheduleGetById", "Schedule", new { scheduleId = dto.ScheduleId, period="week", startDate = DateTime.Now});
         }
 
         [HttpGet("/event/{scheduleEventId}")]
@@ -50,7 +86,10 @@ namespace URFU_Scheduling.Controllers
         {
             var scheduleEvent = _eventService.Get(scheduleEventId);
             if (scheduleEvent == null) return NotFound("no event");
-            return Ok(scheduleEvent);
+            var totalString = scheduleEvent.Name + " " + scheduleEvent.Description + " " +
+                scheduleEvent.DateStart.ToString() + " " + scheduleEvent.Duration.ToString() + 
+                scheduleEvent.Schedule.Name.ToString();
+            return Ok(totalString);
         }
 
         [HttpPut("/event/{scheduleEventId}")]
@@ -69,7 +108,10 @@ namespace URFU_Scheduling.Controllers
             scheduleEvent.RecurrenceId = dto.RecurrenceId;
             _eventService.Update(scheduleEvent);
 
-            return Ok(scheduleEvent);
+            var totalString = scheduleEvent.Name + " " + scheduleEvent.Description + " " +
+                scheduleEvent.DateStart.ToString() + " " + scheduleEvent.Duration.ToString() +
+                scheduleEvent.Schedule.Name.ToString();
+            return Ok(totalString);
         }
 
         [HttpDelete("/event/{scheduleEventId}")]
@@ -100,7 +142,6 @@ namespace URFU_Scheduling.Controllers
             return Ok(scheduleEvent);
         }
 
-        // сделать, когда будет нужный сервис
         [HttpPost("/event/{scheduleEventId}/import/{importType}")]
         public async Task<IActionResult> ImportEvent(int scheduleId, int scheduleEventId, string importType)
         {

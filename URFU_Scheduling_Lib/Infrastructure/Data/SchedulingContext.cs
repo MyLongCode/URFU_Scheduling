@@ -19,7 +19,7 @@ public class SchedulingContext : DbContext
     public SchedulingContext(DbContextOptions<SchedulingContext> options)
         : base(options)
     {
-
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

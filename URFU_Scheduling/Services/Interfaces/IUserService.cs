@@ -8,5 +8,6 @@ namespace URFU_Scheduling.Services.Interfaces
         public bool Register(IRegistrationData data);
 
         public Task<bool> Authorize(string login, string password);
+        public Guid GetIdByLogin(string login);
     }
 }
