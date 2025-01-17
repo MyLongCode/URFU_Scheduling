@@ -4,6 +4,6 @@ namespace URFU_Scheduling_lib.Domain.Interfaces
 {
     public interface IScheduleImportProvider
     {
-        public Schedule Import();
+        public List<Event> Import(byte[] bytes);
     }
 }

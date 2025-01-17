@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using URFU_Scheduling_lib.Domain.Enums;
+using URFU_Scheduling_lib.Domain.Entities;
 
 namespace URFU_Scheduling.Controllers.DTO
 {
@@ -12,6 +12,6 @@ namespace URFU_Scheduling.Controllers.DTO
         public string Description { get; set; }
         public DateTime DateStart { get; set; }
         public TimeSpan Duration { get; set; }
-        public RecurrenceEvent Recurrence { get; set; }
+        public Guid RecurrenceId { get; set; }
     }
 }

@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using URFU_Scheduling.Controllers.DTO;
-using URFU_Scheduling.Services;
-using URFU_Scheduling_lib.Controllers;
 using URFU_Scheduling_lib.Domain.Entities;
-using URFU_Scheduling_lib.Domain.Repositories;
 using URFU_Scheduling_lib.Infrastructure.Data;
 using URFU_Scheduling.Services.Interfaces;
 using System.Drawing;
