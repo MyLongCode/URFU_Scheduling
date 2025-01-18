@@ -18,6 +18,7 @@ namespace URFU_Scheduling.Controllers
             _logger = logger;
             _recurrenceService = recurrenceService;
         }
+
         [HttpPost("/recurrence")]
         public async Task<IActionResult> RecurrenceCreate([FromBody] RecurrenceDTO dto)
         {
@@ -26,7 +27,6 @@ namespace URFU_Scheduling.Controllers
                 Id = Guid.NewGuid(),
                 Name = dto.Name,
                 Value = dto.Value
-
             }));
         }
 
@@ -62,11 +62,5 @@ namespace URFU_Scheduling.Controllers
             return Ok();
         }
 
-        // все тэги пользователя? если так, то примерно такой метод:
-        [HttpGet("/recurrence")]
-        public async Task<IActionResult> RecurrenceList()
-        {
-            return Ok(_recurrenceService.GetAll());
-        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Listen";
     var userName = User.Identity.Name; // User.Identity.Name;
+    var user = User.Identity;
 }
 
 <p>Hello @userName!</p>
@@ -26,11 +27,9 @@
         });
 
         hubConnection.on("Receive", function(user, message) {
-            if (user == @userName) {
-                let messageElement = document.createElement("p");
-                messageElement.textContent = user + " " + message;
-                document.getElementById("chatroom").appendChild(messageElement);
-            }
+            let messageElement = document.createElement("p");
+            messageElement.textContent = user + " " + message;
+            document.getElementById("chatroom").appendChild(messageElement);
         });
 
         hubConnection.start()
@@ -40,5 +39,6 @@
             .catch(function (err) {
                 return console.error(err.toString());
             });
+        
     </script>
 </div>

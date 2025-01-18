@@ -4,10 +4,11 @@ using URFU_Scheduling.Controllers.DTO;
 using URFU_Scheduling_lib.Domain.Entities;
 using URFU_Scheduling.Services.Interfaces;
 using URFU_Scheduling_lib.Domain.Entities;
-
 using Microsoft.AspNetCore.SignalR;
 using NuGet.Protocol;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Humanizer;
+using Newtonsoft.Json;
 
 namespace URFU_Scheduling.Controllers
 {
@@ -84,10 +85,11 @@ namespace URFU_Scheduling.Controllers
         [HttpGet("/event/{scheduleEventId}")]
         public async Task<IActionResult> EventRetrieve(Guid scheduleEventId)
         {
+            await _hubContext.Clients.All.SendAsync("Receive", User.Identity.Name, $"view event: {scheduleEventId}");
             var scheduleEvent = _eventService.Get(scheduleEventId);
             if (scheduleEvent == null) return NotFound("no event");
-            var totalString = scheduleEvent.Name + " " + scheduleEvent.Description + " " +
-                scheduleEvent.DateStart.ToString() + " " + scheduleEvent.Duration.ToString() + 
+            var totalString = scheduleEvent.Name + ";" + scheduleEvent.Description + ";" +
+                scheduleEvent.DateStart.ToString() + ";" + scheduleEvent.Duration.ToString() + ";" +
                 scheduleEvent.Schedule.Name.ToString();
             return Ok(totalString);
         }
