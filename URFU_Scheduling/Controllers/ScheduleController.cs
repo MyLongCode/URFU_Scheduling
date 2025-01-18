@@ -75,7 +75,7 @@ namespace URFU_Scheduling.Controllers
             var schedule = _scheduleService.Get(scheduleId);
             if (schedule == null) return NotFound("schedule is not defined");
             if (period == null) period = "week";
-            if (startDate == null) startDate = DateTime.MinValue;
+            if (startDate == null) startDate = DateTime.Now;
             var events = _eventService.GetEvents(schedule.Id, period, startDate).ToList();
             var viewmodel = new ScheduleViewModel()
             {

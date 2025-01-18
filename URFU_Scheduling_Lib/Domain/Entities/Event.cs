@@ -29,7 +29,7 @@ public class Event : Entity
     [Column("duration")]
     public TimeSpan Duration { get; set; }
 
-    [Column("recurrence")]
+    [Column("recurrence_id")]
     public Guid RecurrenceId { get; set; }
 
     [ForeignKey("RecurrenceId")]

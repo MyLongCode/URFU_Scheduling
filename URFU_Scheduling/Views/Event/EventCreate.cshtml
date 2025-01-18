@@ -48,6 +48,14 @@
             @Html.ValidationMessageFor(m => m.TagId, "", new { @class = "text-danger" })
         </div>
 
+        <div class="mb-3">
+            <label for="RecurrenceId" class="form-label">Период</label>
+            <select id="RecurrenceId" name="RecurrenceId" class="form-control">
+                <option value="">Select tag</option>
+                <option value="ae4f5261-433b-4cc0-81a6-d625ead46137">default</option>
+            </select>
+        </div>
+
         <div class="mb-3 form-check">
             @Html.CheckBoxFor(m => m.IsNotify, new { @class = "form-check-input", id = "IsNotify" })
             <label class="form-check-label" for="IsNotify">Enable notification</label>
