@@ -31,6 +31,7 @@ builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<IScheduleExportProvider, IcsScheduleExportProvider>();
 builder.Services.AddScoped<IScheduleImportProvider, IcsScheduleImportProvider>();
 builder.Services.AddScoped<IRecurrenceService, RecurrenceService>();
+builder.Services.AddScoped<IEventImportProvider, CSVEventImportProvider>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => 
                 {

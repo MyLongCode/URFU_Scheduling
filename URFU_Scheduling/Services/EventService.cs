@@ -1,5 +1,8 @@
-﻿using URFU_Scheduling.Services.Interfaces;
+﻿using Microsoft.DotNet.Scaffolding.Shared;
+using URFU_Scheduling.Services.Interfaces;
+using URFU_Scheduling.Utilities;
 using URFU_Scheduling_lib.Domain.Entities;
+using URFU_Scheduling_lib.Domain.Interfaces;
 using URFU_Scheduling_lib.Domain.Repositories;
 
 namespace URFU_Scheduling.Services
@@ -47,6 +50,20 @@ namespace URFU_Scheduling.Services
             ev.TagId = eventId;
             Update(ev);
             return ev;
+        }
+
+        public bool Import(IEventImportProvider<Stream> provider, Stream input, out CSVEvent[] result)
+        {
+            try
+            {
+                result = provider.Import(input);
+                return true;
+            }
+            catch
+            {
+                result = default!;
+                return false;
+            }
         }
     }
 }
