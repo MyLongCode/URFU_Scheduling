@@ -8,11 +8,17 @@ using URFU_Scheduling_lib.Domain.Interfaces;
 using URFU_Scheduling.Utilities;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR;
+using Quartz;
+using Quartz.Impl;
+using URFU_Scheduling.Jobs;
+using Quartz.Simpl;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+
+//XmlConfigurator.Configure(new System.IO.FileInfo("log4net.config"));
 
 var connectionString = builder.Configuration.GetConnectionString("SchedulingDB");
 builder.Services.AddDbContext<SchedulingContext>(options =>
@@ -37,6 +43,20 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
                     options.LoginPath = new PathString("/Auth/Login");
                 });
 builder.Services.AddSignalR();
+
+builder.Services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+builder.Services.AddTransient<DailyEventNotificationJob>();
+builder.Services.AddSingleton(provider =>
+{
+    var schedulerFactory = provider.GetRequiredService<ISchedulerFactory>();
+    var scheduler = schedulerFactory.GetScheduler().Result;
+    scheduler.JobFactory = provider.GetRequiredService<MicrosoftDependencyInjectionJobFactory>();
+    return scheduler;
+});
+builder.Services.AddSingleton<MicrosoftDependencyInjectionJobFactory>();
+
+builder.Services.AddHostedService<QuartzHostedService>();
+builder.Services.AddLogging(builder => builder.AddConsole());
 
 var app = builder.Build();
 

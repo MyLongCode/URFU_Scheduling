@@ -3,7 +3,7 @@ using URFU_Scheduling_lib.Domain.Interfaces;
 
 namespace URFU_Scheduling.Services.Interfaces
 {
-    public interface IUserService
+    public interface IUserService : ICRUDSerivce<User>
     {
         public bool Register(IRegistrationData data);
 
