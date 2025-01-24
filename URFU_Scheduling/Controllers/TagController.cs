@@ -41,7 +41,7 @@ namespace URFU_Scheduling.Controllers
         {
             return Ok(_tagService.Create(new Tag()
             {
-                UserId = dto.UserId,
+                UserId = _userService.GetIdByLogin(User.Identity.Name),
                 Name = dto.Name,
                 Color = dto.Color
             }));
