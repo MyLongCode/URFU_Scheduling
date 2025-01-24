@@ -41,7 +41,8 @@ builder.Services.AddScoped<IDailyNotificationService, DailyNotificationService>(
 //builder.Services.AddScoped<IScheduleExportProvider, SheetsScheduleExportProvider>();
 builder.Services.AddScoped<IScheduleExportProvider, IcsScheduleExportProvider>();
 builder.Services.AddScoped<IScheduleImportProvider, IcsScheduleImportProvider>();
-
+builder.Services.AddScoped<IRecurrenceService, RecurrenceService>();
+builder.Services.AddScoped<IEventImportProvider, CSVEventImportProvider>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => 
                 {
