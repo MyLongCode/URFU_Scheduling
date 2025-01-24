@@ -9,6 +9,12 @@ using NuGet.Protocol;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Humanizer;
 using Newtonsoft.Json;
+using URFU_Scheduling_lib.Domain.Interfaces;
+using Ical.Net;
+using System.Data.Entity.Validation;
+using URFU_Scheduling.Utilities;
+using Microsoft.AspNetCore.Mvc.Diagnostics;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace URFU_Scheduling.Controllers
 {
@@ -23,15 +29,18 @@ namespace URFU_Scheduling.Controllers
 
         private readonly ITagService _tagService;
         private readonly IUserService _userService;
+        private readonly IRecurrenceService _recurrenceService;
 
-
+        private readonly IEventImportProvider _eventImportProvider;
         public EventController(
             ILogger<EventController> logger,
             IScheduleService sheduleRepository,
             IEventService eventRepository,
             IHubContext<NotificationHub> hubContext,
             ITagService tagService,
-            IUserService userService)
+            IUserService userService,
+            IRecurrenceService recurrenceService,
+            IEventImportProvider eventImportProvider)
         {
             _logger = logger;
             _scheduleService = sheduleRepository;
@@ -39,6 +48,8 @@ namespace URFU_Scheduling.Controllers
             _hubContext = hubContext;
             _tagService = tagService;
             _userService = userService;
+            _eventImportProvider = eventImportProvider;
+            _recurrenceService = recurrenceService;
         }
 
         [HttpGet("/schedule/{scheduleId}/event")]
@@ -145,9 +156,34 @@ namespace URFU_Scheduling.Controllers
         }
 
         [HttpPost("/event/{scheduleEventId}/import/{importType}")]
-        public async Task<IActionResult> ImportEvent(int scheduleId, int scheduleEventId, string importType)
+        public async Task<IActionResult> ImportEvent(IFormFile file, Guid scheduleEventId, string importType)
         {
-            return Ok();
+            if (true)
+            {
+                var stream = file.OpenReadStream();
+                var provider = _eventImportProvider as IEventImportProvider<Stream>;
+                if (_eventService.Import(provider!, stream, out var result))
+                {
+                    var defaultRec = _recurrenceService.GetAll().First(e => e.Name == "default");
+                    var defaultTag = _tagService.GetAll().First(e => e.Name == "default");
+                    foreach (var csvEvent in result)
+                    {
+                        var e = new Event
+                        {
+                            ScheduleId = scheduleEventId,
+                            Name = csvEvent.Name,
+                            Description = csvEvent.Description,
+                            Duration = csvEvent.Duration,
+                            DateStart = csvEvent.DateStart,
+                            TagId = defaultTag.Id,
+                            RecurrenceId = defaultRec.Id,
+                        };
+                        _eventService.Create(e);
+                    }
+                    return Ok();
+                }
+            }
+            return BadRequest();
         }
     }
 }

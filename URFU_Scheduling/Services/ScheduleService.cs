@@ -38,7 +38,7 @@ namespace URFU_Scheduling.Services
             }
         }
 
-        public bool  Import(IScheduleImportProvider provider, byte[] bytes, out object result)
+        public bool Import(IScheduleImportProvider provider, byte[] bytes, out object result)
         {
             try
             {
