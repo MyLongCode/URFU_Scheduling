@@ -14,6 +14,7 @@ public class SchedulingContext : DbContext
     public virtual DbSet<Tag> Tags { get; set; } = null!;
     public virtual DbSet<Event> Events { get; set; } = null!;
     public virtual DbSet<Recurrence> Recurrences { get; set; } = null!;
+    public virtual DbSet<DailyNotification> DailyNotifications { get; set; } = null!;
 
 
     public SchedulingContext(DbContextOptions<SchedulingContext> options)

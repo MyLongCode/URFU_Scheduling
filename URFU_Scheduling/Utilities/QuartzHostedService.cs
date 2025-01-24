@@ -28,7 +28,7 @@ namespace URFU_Scheduling.Jobs
 
                      var trigger = TriggerBuilder.Create()
                        .WithIdentity("DailyEventNotificationTrigger", "NotificationGroup")
-                        .WithCronSchedule("0/30 * * * * ?") // Запуск каждую секунду
+                       .WithCronSchedule("0 0 6 * * ?") 
                        .Build();
 
                     await _scheduler.ScheduleJob(job, trigger, cancellationToken);

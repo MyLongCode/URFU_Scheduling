@@ -29,10 +29,15 @@ builder.Services.AddScoped<ScheduleRepository>();
 builder.Services.AddScoped<EventRepository>();
 builder.Services.AddScoped<TagRepository>();
 builder.Services.AddScoped<RecurrenceRepository>();
+builder.Services.AddScoped<DailyNotificationRepository>();
+
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
+builder.Services.AddScoped<IRecurrenceService, RecurrenceService>();
+builder.Services.AddScoped<IDailyNotificationService, DailyNotificationService>();
+
 //builder.Services.AddScoped<IScheduleExportProvider, SheetsScheduleExportProvider>();
 builder.Services.AddScoped<IScheduleExportProvider, IcsScheduleExportProvider>();
 builder.Services.AddScoped<IScheduleImportProvider, IcsScheduleImportProvider>();
@@ -43,6 +48,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
                 {
                     options.LoginPath = new PathString("/Auth/Login");
                 });
+
 builder.Services.AddSignalR();
 
 builder.Services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();

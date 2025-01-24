@@ -1,6 +1,4 @@
-﻿using Microsoft.CodeAnalysis.Operations;
-using Quartz;
-using URFU_Scheduling_lib.Domain.Repositories;
+﻿using Quartz;
 using URFU_Scheduling.Services.Interfaces;
 using URFU_Scheduling_lib.Domain.Entities;
 
@@ -8,20 +6,17 @@ namespace URFU_Scheduling.Jobs
 {
     public class DailyEventNotificationJob : IJob
     {
-        private readonly IEventService _eventService;
-        private readonly IUserService _userService;
         private readonly IScheduleService _scheduleService;
         private readonly ILogger<DailyEventNotificationJob> _logger;
+        private readonly IDailyNotificationService _dailyNotificationService;
 
         public DailyEventNotificationJob(
-                IEventService eventService,
-                IUserService userService,
+                IDailyNotificationService dailyNotificationService,
                 IScheduleService scheduleService,
                 ILogger<DailyEventNotificationJob> logger
                 )
         {
-            _eventService = eventService;
-            _userService = userService;
+            _dailyNotificationService = dailyNotificationService;
             _scheduleService = scheduleService;
             _logger = logger;
         }
@@ -31,33 +26,33 @@ namespace URFU_Scheduling.Jobs
         {
             _logger.LogInformation("DailyEventNotificationJob started");
             var today = DateTime.Today;
-            var schedules = _scheduleService.GetAll()
-                .Where(schedule => schedule.Events.Any(ev => ev.DateStart.Date.Equals(today.Date)));
-            Send(schedules, today);
-            _logger.LogInformation("DailyEventNotificationJob finished");
-        }
 
-        public void Send(IEnumerable<Schedule> schedules, DateTime today)
-        {
-            if (!schedules.Any())
-            {
-                _logger.LogInformation("No schedules found.");
+            var usersWithEvents = _scheduleService.GetAll()
+                .Where(schedule => schedule.Events.Any(ev => ev.DateStart.Date.Equals(today.Date)))
+                .GroupBy(x => x.UserId);
 
-            }
-            else
+            foreach (var userGroup in usersWithEvents)
             {
-                _logger.LogInformation($"Found {schedules.Count()} schedules for today");
-                foreach (Schedule schedule in schedules)
+                var userId = userGroup.Key;
+                var totalEvents = userGroup.SelectMany(schedule => schedule.Events).Where(ev => ev.DateStart.Date.Equals(today.Date)).Count();
+                var scheduleCount = userGroup.Count();
+
+                var message = $"У вас сегодня {totalEvents} событий в {scheduleCount} расписаниях.";
+
+                var newNotification = new DailyNotification
                 {
-                    var user = _userService.Get(schedule.UserId);
-                    var events = schedule.Events.Where(ev => ev.DateStart.Date.Equals(today));
-                    _logger.LogInformation($"{schedule.Name}{user.Login}");
-                    foreach (Event todayEvent in events)
-                    {
-                        _logger.LogInformation($"{todayEvent.Name} at {todayEvent.DateStart} to {todayEvent.DateStart + todayEvent.Duration}");
-                    }
-                }
+                    Id = Guid.NewGuid(),
+                    UserId = userId,
+                    SentAt = today,
+                    Message = message
+                };
+
+                _dailyNotificationService.Create(newNotification);
+
+                _logger.LogInformation($"Notification for user {userId}: {message}");
             }
+
+            _logger.LogInformation("DailyEventNotificationJob finished");
         }
     }
 }
