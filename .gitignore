@@ -396,3 +396,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/URFU_Scheduling_Lib/Migrations
+/URFU_Scheduling/appsettings.json
